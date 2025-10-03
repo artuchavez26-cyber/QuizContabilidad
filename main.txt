@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Contable</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    .question {
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    button {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #3498db;
+      color: #fff;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz Contable</h1>
+    <div id="quiz"></div>
+    <button id="next">Siguiente</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "¿Qué son los activos en contabilidad?",
+        options: ["Obligaciones de la empresa", "Recursos controlados que generan beneficios", "Pérdidas acumuladas"],
+        answer: "Recursos controlados que generan beneficios"
+      },
+      {
+        question: "¿Cuál es la ecuación contable básica?",
+        options: ["Activo = Pasivo + Patrimonio", "Activo + Pasivo = Patrimonio", "Pasivo = Activo + Patrimonio"],
+        answer: "Activo = Pasivo + Patrimonio"
+      },
+      {
+        question: "¿Qué es un pasivo?",
+        options: ["Un recurso de la empresa", "Una obligación presente con terceros", "Una cuenta de ingresos"],
+        answer: "Una obligación presente con terceros"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const quiz = document.getElementById("quiz");
+    const nextBtn = document.getElementById("next");
+    const result = document.getElementById("result");
+
+    function loadQuestion() {
+      const q = quizData[currentQuestion];
+      quiz.innerHTML = `
+        <div class="question">${q.question}</div>
+        <div class="options">
+          ${q.options.map(opt => `<button class="option">${opt}</button>`).join("")}
+        </div>
+      `;
+      document.querySelectorAll(".option").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (btn.textContent === q.answer) {
+            score++;
+          }
+          nextBtn.style.display = "block";
+        });
+      });
+    }
+
+    nextBtn.addEventListener("click", () => {
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+        nextBtn.style.display = "none";
+      } else {
+        quiz.style.display = "none";
+        nextBtn.style.display = "none";
+        result.textContent = `Terminaste el quiz 🎉 Tu puntaje: ${score}/${quizData.length}`;
+      }
+    });
+
+    loadQuestion();
+    nextBtn.style.display = "none";
+  </script>
+</body>
+</html>
